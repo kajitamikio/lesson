@@ -9,7 +9,7 @@
 
 	<div id="app">
 
-		<p>{{ time }}</p>
+		<p>{{ min }} : {{ sec }} : {{ dec }}</p>
 
 		<button @click="start">スタート</button>
 		<button @click="stop">ストップ</button>
@@ -30,21 +30,77 @@
 			el:'#app',
 			data:{
 				time:'00:00.00',
+				min:0,
+				sec:0,
+				dec:0,
+				obj:null,
+				status:false,
+
 			},
 			methods:{
 				start(){
-					this.time = this.time + 1;
+					// this.time = this.time + 1;
+					// this.countUp();
+					if (this.status === false) {
+					this.obj = setInterval(this.countUp, 10);
+					}
+					this.status = true;
 				},
-				countDown(){
-					this.count = this.count - 1;
+
+				stop(){
+					if(this.obj !== null && this.status === true){
+					clearInterval(this.obj);
+					this.status = false;
+					}
 				},
+				reset(){
+					if(this.status === false){
+					this.min = 0;
+					this.sec = 0;
+					this.dec = 0;
+					}
+				},
+				countUp(){
+					this.dec = this.dec + 1;
+					this.adjustNum();
+				},
+				adjustNum(){
+					this.min = Number(this.min);
+					this.sec = Number(this.sec);
+					this.dec = Number(this.dec);
+
+					if (this.dec > 100) {
+						this.sec=this.sec + 1;
+						this.dec = 0;
+						if(this.sec > 60){
+							this.min = this.min + 1;
+							this.sec = 0;
+
+						}
+					}
+
+					this.min = (String(this.min).length < 2) ? '0' + String(this.min) : Number(this.min);
+					this.sec = (String(this.sec).length < 2) ? '0' + String(this.sec) : Number(this.sec);
+					this.dec = (String(this.dec).length < 2) ? '0' + String(this.dec) : Number(this.dec);
+				},
+				adjustSingle(){
+					num = (String(num).length < 2) ? '0' + String(this.min) : Number(this.min);
+					this.sec = (String(this.sec).length < 2) ? '0' + String(this.sec) : Number(this.sec);
+					this.dec = (String(this.dec).length < 2) ? '0' + String(this.dec) : Number(this.dec);
+				}
 			},
-
-
+			//DOM読み込み後、実行
+			mounted(){
+				this.min = (String(this.min).length < 2) ? '0' + String(this.min) : Number(this.min);
+				this.sec = (String(this.sec).length < 2) ? '0' + String(this.sec) : Number(this.sec);
+				this.dec = (String(this.dec).length < 2) ? '0' + String(this.dec) : Number(this.dec);
+				// this.adjustsingle();
+			},
+			//変数(data)の値がかわったとき実行
+			updated(){
+				// this.adjustsingle();	
+			},
 		});
-
-
-
 	</script>
 
 </body>
