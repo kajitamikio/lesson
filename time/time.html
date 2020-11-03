@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Vue Lesson 1</title>
+</head>
+<body>
+
+	<div id="app">
+
+		<p>{{ time }}</p>
+
+		<button @click="start">スタート</button>
+		<button @click="stop">ストップ</button>
+		<button @click="reset">リセット</button>
+		
+		</select>
+	</div>
+
+<!--　Vue.js 導入部 -->
+	<script src="https://unpkg.com/es6-promise"></script>
+	<script src="https://unpkg.com/vue"></script>
+	<!-- Vue用のajaxツール（axios） -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+	<script src="https://unpkg.com/http-vue-loader"></script>
+
+	<script type="text/javascript">
+		var app = new Vue({
+			el:'#app',
+			data:{
+				time:'00:00.00',
+			},
+			methods:{
+				start(){
+					this.time = this.time + 1;
+				},
+				countDown(){
+					this.count = this.count - 1;
+				},
+			},
+
+
+		});
+
+
+
+	</script>
+
+</body>
+</html>
