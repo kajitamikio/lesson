@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Vue Lesson 1</title>
+</head>
+<body>
+
+	<div id="app">
+		
+		<p>{{ min }} : {{ sec }} : {{ dec }}</p>
+
+		<button @click="start">スタート</button>
+		<button @click="stop">ストップ</button>
+		<button @click="reset">リセット</button>
+		
+		<select tyoe="number1" name="hours" v-model="min">
+			<option v-for="n in 5" v-bind:value="n-1">{{ n-1 }}</option>
+
+		</select>
+
+		<select tyoe="number2" name="hours" v-model="sec">
+			<option v-for="n in 59" v-bind:value="n-1">{{ n-1 }}</option>
+
+			</select>
+
+		<select tyoe="number2" name="hours" v-model="dec">
+			<option v-for="n in 59" v-bind:value="n-1">{{ n-1 }}</option>
+
+			</select>
+
+	</div>
+
+<!--　Vue.js 導入部 -->
+	<script src="https://unpkg.com/es6-promise"></script>
+	<script src="https://unpkg.com/vue"></script>
+	<!-- Vue用のajaxツール（axios） -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+	<script src="https://unpkg.com/http-vue-loader"></script>
+
+	<script type="text/javascript">
+
+		var app = new Vue({
+			el:'#app',
+			data:{
+				time:'00:00.00',
+				min:0,
+				sec:5,
+				dec:0,
+				obj:null,
+				status:false,
+
+			},
+			methods:{
+				start(){
+					// this.time = this.time + 1;
+					// this.countUp();
+					if (this.status === false) {
+					this.obj = setInterval(this.countDown, 10);
+					}
+					this.status = true;
+				},
+
+				stop(){
+					if(this.obj !== null && this.status === true){
+					clearInterval(this.obj);
+					this.status = false;
+					}
+				},
+				reset(){
+					if(this.status === false){
+					this.min = 0;
+					this.sec = 0;
+					this.dec = 0;
+					}
+				},
+				countDown(){
+					if (0 < this.dec )
+					this.dec = this.dec - 1;
+					this.adjustNum();
+				},
+				adjustNum(){
+					this.min = Number(this.min);
+					this.sec = Number(this.sec);
+					this.dec = Number(this.dec);
+
+					if (this.dec <= 0 && this.sec >= 1) {
+        				this.sec=this.sec - 1;
+						this.dec = 59;
+
+						if(this.sec <= 0 && this.min >= 1) {
+							this.min=this.min - 1;
+							this.sec = 59;
+
+							if (this.dec <= 0 && this.sec == 0 && this.min == 0){
+								this.dec = 0;
+								this.sec = 0;
+								this.min = 0;
+							}
+
+						}
+
+					} 
+
+					this.min = (String(this.min).length < 2) ? '0' + String(this.min) : Number(this.min);
+					this.sec = (String(this.sec).length < 2) ? '0' + String(this.sec) : Number(this.sec);
+					this.dec = (String(this.dec).length < 2) ? '0' + String(this.dec) : Number(this.dec);
+				},
+				adjustSingle(){
+					num = (String(num).length < 2) ? '0' + String(this.min) : Number(this.min);
+					this.sec = (String(this.sec).length < 2) ? '0' + String(this.sec) : Number(this.sec);
+					this.dec = (String(this.dec).length < 2) ? '0' + String(this.dec) : Number(this.dec);
+				}
+			},
+			//DOM読み込み後、実行
+			mounted(){
+				this.min = (String(this.min).length < 2) ? '0' + String(this.min) : Number(this.min);
+				this.sec = (String(this.sec).length < 2) ? '0' + String(this.sec) : Number(this.sec);
+				this.dec = (String(this.dec).length < 2) ? '0' + String(this.dec) : Number(this.dec);
+				// this.adjustsingle();
+			},
+			//変数(data)の値がかわったとき実行
+			updated(){
+				// this.adjustsingle();	
+			},
+		});
+	</script>
+
+</body>
+</html>
